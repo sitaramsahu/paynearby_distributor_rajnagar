@@ -1,0 +1,627 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model coadies_admin {
+  id       BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  name     String @db.VarChar(150)
+  email    String @unique @db.VarChar(150)
+  password String @db.VarChar(255)
+  role     String @default("admin") @db.VarChar(50)
+
+  @@index([role], map: "role_index")
+}
+
+model coadies_contact {
+  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  name        String   @db.VarChar(150)
+  email       String   @db.VarChar(150)
+  phone       String?  @db.VarChar(20)
+  company     String?  @db.VarChar(150)
+  service     String?  @db.VarChar(150)
+  budget      String?  @db.VarChar(100)
+  message     String   @db.Text
+  projectType String   @default("new") @db.VarChar(50)
+  status      String   @default("pending") @db.VarChar(50)
+  createdAt   DateTime @default(now())
+}
+
+model coadies_readers {
+  ID               BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  readers_username String  @db.VarChar(100)
+  readers_password String  @db.VarChar(255)
+  readers_email    String  @unique @db.VarChar(150)
+  readers_phone    String  @db.VarChar(20)
+  readers_address  String  @db.VarChar(250)
+  readers_status   Int     @default(1)
+  readers_picture  String? @db.VarChar(255)
+  readers_name     String  @db.VarChar(150)
+  role             String  @default("readers") @db.VarChar(50)
+
+  @@index([readers_email], map: "readers_email")
+  @@index([readers_phone], map: "readers_phone")
+  @@index([readers_username], map: "readers_username")
+  @@index([role], map: "role_index")
+}
+
+model wp_actionscheduler_actions {
+  action_id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  hook                 String
+  status               String    @db.VarChar(20)
+  scheduled_date_gmt   DateTime? @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  scheduled_date_local DateTime? @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  priority             Int       @default(10) @db.UnsignedTinyInt
+  args                 String?
+  schedule             String?   @db.LongText
+  group_id             BigInt    @default(0) @db.UnsignedBigInt
+  attempts             Int       @default(0)
+  last_attempt_gmt     DateTime? @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  last_attempt_local   DateTime? @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  claim_id             BigInt    @default(0) @db.UnsignedBigInt
+  extended_args        String?   @db.VarChar(8000)
+
+  @@index([args], map: "args")
+  @@index([claim_id, status, scheduled_date_gmt], map: "claim_id_status_scheduled_date_gmt")
+  @@index([group_id], map: "group_id")
+  @@index([hook(length: 163), status, scheduled_date_gmt], map: "hook_status_scheduled_date_gmt")
+  @@index([last_attempt_gmt], map: "last_attempt_gmt")
+  @@index([scheduled_date_gmt], map: "scheduled_date_gmt")
+  @@index([status, scheduled_date_gmt], map: "status_scheduled_date_gmt")
+}
+
+model wp_actionscheduler_claims {
+  claim_id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  date_created_gmt DateTime? @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@index([date_created_gmt], map: "date_created_gmt")
+}
+
+model wp_actionscheduler_groups {
+  group_id BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  slug     String @db.VarChar(255)
+
+  @@index([slug(length: 191)], map: "slug")
+}
+
+model wp_actionscheduler_logs {
+  log_id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  action_id      BigInt    @db.UnsignedBigInt
+  message        String    @db.Text
+  log_date_gmt   DateTime? @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  log_date_local DateTime? @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@index([action_id], map: "action_id")
+  @@index([log_date_gmt], map: "log_date_gmt")
+}
+
+model wp_commentmeta {
+  meta_id    BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  comment_id BigInt  @default(0) @db.UnsignedBigInt
+  meta_key   String? @db.VarChar(255)
+  meta_value String? @db.LongText
+
+  @@index([comment_id], map: "comment_id")
+  @@index([meta_key(length: 191)], map: "meta_key")
+}
+
+model wp_comments {
+  comment_ID           BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  comment_post_ID      BigInt   @default(0) @db.UnsignedBigInt
+  comment_author       String   @db.TinyText
+  comment_author_email String   @default("") @db.VarChar(100)
+  comment_author_url   String   @default("") @db.VarChar(200)
+  comment_author_IP    String   @default("") @db.VarChar(100)
+  comment_date         DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  comment_date_gmt     DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  comment_content      String   @db.Text
+  comment_karma        Int      @default(0)
+  comment_approved     String   @default("1") @db.VarChar(20)
+  comment_agent        String   @default("") @db.VarChar(255)
+  comment_type         String   @default("comment") @db.VarChar(20)
+  comment_parent       BigInt   @default(0) @db.UnsignedBigInt
+  user_id              BigInt   @default(0) @db.UnsignedBigInt
+
+  @@index([comment_approved, comment_date_gmt], map: "comment_approved_date_gmt")
+  @@index([comment_author_email(length: 10)], map: "comment_author_email")
+  @@index([comment_date_gmt], map: "comment_date_gmt")
+  @@index([comment_parent], map: "comment_parent")
+  @@index([comment_post_ID], map: "comment_post_ID")
+}
+
+model wp_e_events {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  event_data String?  @db.Text
+  created_at DateTime @db.DateTime(0)
+
+  @@index([created_at], map: "created_at_index")
+}
+
+model wp_iz_notifications_onpush {
+  id         BigInt  @id @default(autoincrement())
+  post_id    BigInt
+  title      String  @default("") @db.VarChar(60)
+  message    String  @default("") @db.VarChar(150)
+  banner_url String? @db.Text
+}
+
+model wp_jetpack_sync_queue {
+  ID            BigInt   @id @default(autoincrement())
+  queue_id      String   @db.VarChar(50)
+  event_id      String   @db.VarChar(100)
+  event_payload String   @db.LongText
+  timestamp     DateTime @default(now()) @db.Timestamp(0)
+
+  @@index([event_id], map: "event_id")
+  @@index([queue_id], map: "queue_id")
+  @@index([queue_id, event_id], map: "queue_id_event_id")
+  @@index([timestamp], map: "timestamp")
+}
+
+model wp_links {
+  link_id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  link_url         String   @default("") @db.VarChar(255)
+  link_name        String   @default("") @db.VarChar(255)
+  link_image       String   @default("") @db.VarChar(255)
+  link_target      String   @default("") @db.VarChar(25)
+  link_description String   @default("") @db.VarChar(255)
+  link_visible     String   @default("Y") @db.VarChar(20)
+  link_owner       BigInt   @default(1) @db.UnsignedBigInt
+  link_rating      Int      @default(0)
+  link_updated     DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  link_rel         String   @default("") @db.VarChar(255)
+  link_notes       String   @db.MediumText
+  link_rss         String   @default("") @db.VarChar(255)
+
+  @@index([link_visible], map: "link_visible")
+}
+
+model wp_litespeed_url {
+  id         BigInt @id @default(autoincrement())
+  url        String @unique(map: "url", length: 191) @db.VarChar(500)
+  cache_tags String @default("") @db.VarChar(1000)
+
+  @@index([cache_tags(length: 191)], map: "cache_tags")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model wp_litespeed_url_file {
+  id       BigInt @id @default(autoincrement())
+  url_id   BigInt
+  vary     String @default("") @db.VarChar(32)
+  filename String @default("") @db.VarChar(32)
+  type     Int    @db.TinyInt
+  mobile   Int    @db.TinyInt
+  webp     Int    @db.TinyInt
+  expired  Int    @default(0)
+
+  @@index([filename], map: "filename")
+  @@index([filename, expired], map: "filename_2")
+  @@index([type], map: "type")
+  @@index([url_id, expired], map: "url_id")
+  @@index([url_id, vary, type], map: "url_id_2")
+}
+
+model wp_options {
+  option_id    BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  option_name  String @unique(map: "option_name") @default("")
+  option_value String @db.LongText
+  autoload     String @default("yes") @db.VarChar(20)
+
+  @@index([autoload], map: "autoload")
+}
+
+model wp_postmeta {
+  meta_id    BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  post_id    BigInt  @default(0) @db.UnsignedBigInt
+  meta_key   String? @db.VarChar(255)
+  meta_value String? @db.LongText
+
+  @@index([meta_key(length: 191)], map: "meta_key")
+  @@index([post_id], map: "post_id")
+}
+
+model wp_posts {
+  ID                    BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  post_author           BigInt   @default(0) @db.UnsignedBigInt
+  post_date             DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  post_date_gmt         DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  post_content          String   @db.LongText
+  post_title            String   @db.Text
+  post_excerpt          String   @db.Text
+  post_status           String   @default("publish") @db.VarChar(20)
+  comment_status        String   @default("open") @db.VarChar(20)
+  ping_status           String   @default("open") @db.VarChar(20)
+  post_password         String   @default("") @db.VarChar(255)
+  post_name             String   @default("") @db.VarChar(200)
+  to_ping               String   @db.Text
+  pinged                String   @db.Text
+  post_modified         DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  post_modified_gmt     DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  post_content_filtered String   @db.LongText
+  post_parent           BigInt   @default(0) @db.UnsignedBigInt
+  guid                  String   @default("") @db.VarChar(255)
+  menu_order            Int      @default(0)
+  post_type             String   @default("post") @db.VarChar(20)
+  post_mime_type        String   @default("") @db.VarChar(100)
+  comment_count         BigInt   @default(0)
+
+  @@index([post_author], map: "post_author")
+  @@index([post_name(length: 191)], map: "post_name")
+  @@index([post_parent], map: "post_parent")
+  @@index([post_type, post_status, post_date, ID], map: "type_status_date")
+}
+
+model wp_rank_math_analytics_gsc {
+  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  created     DateTime @db.Timestamp(0)
+  query       String   @db.VarChar(1000)
+  page        String   @db.VarChar(500)
+  clicks      Int      @db.MediumInt
+  impressions Int      @db.MediumInt
+  position    Float
+  ctr         Float
+
+  @@index([page(length: 190)], map: "analytics_page")
+  @@index([query(length: 190)], map: "analytics_query")
+  @@index([clicks], map: "clicks")
+  @@index([position], map: "rank_position")
+}
+
+model wp_rank_math_analytics_inspections {
+  id                   BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  page                 String   @db.VarChar(500)
+  created              DateTime @db.Timestamp(0)
+  index_verdict        String   @db.VarChar(64)
+  indexing_state       String   @db.VarChar(64)
+  coverage_state       String   @db.Text
+  page_fetch_state     String   @db.VarChar(64)
+  robots_txt_state     String   @db.VarChar(64)
+  rich_results_verdict String   @db.VarChar(64)
+  rich_results_items   String   @db.LongText
+  last_crawl_time      DateTime @db.Timestamp(0)
+  crawled_as           String   @db.VarChar(64)
+  google_canonical     String   @db.Text
+  user_canonical       String   @db.Text
+  sitemap              String   @db.Text
+  referring_urls       String   @db.LongText
+  raw_api_response     String   @db.LongText
+
+  @@index([page(length: 190)], map: "analytics_object_page")
+  @@index([created], map: "created")
+  @@index([index_verdict], map: "index_verdict")
+  @@index([page_fetch_state], map: "page_fetch_state")
+  @@index([rich_results_verdict], map: "rich_results_verdict")
+  @@index([robots_txt_state], map: "robots_txt_state")
+}
+
+model wp_rank_math_analytics_objects {
+  id                  BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  created             DateTime  @db.Timestamp(0)
+  title               String    @db.Text
+  page                String    @db.VarChar(500)
+  object_type         String    @db.VarChar(100)
+  object_subtype      String    @db.VarChar(100)
+  object_id           BigInt    @db.UnsignedBigInt
+  primary_key         String    @db.VarChar(255)
+  seo_score           Int       @default(0) @db.TinyInt
+  page_score          Int       @default(0) @db.TinyInt
+  is_indexable        Boolean   @default(true)
+  schemas_in_use      String?   @db.VarChar(500)
+  desktop_interactive Float?    @default(0)
+  desktop_pagescore   Float?    @default(0)
+  mobile_interactive  Float?    @default(0)
+  mobile_pagescore    Float?    @default(0)
+  pagespeed_refreshed DateTime? @db.Timestamp(0)
+
+  @@index([page(length: 190)], map: "analytics_object_page")
+}
+
+model wp_rank_math_internal_links {
+  id             BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  url            String @db.VarChar(255)
+  post_id        BigInt @db.UnsignedBigInt
+  target_post_id BigInt @db.UnsignedBigInt
+  type           String @db.VarChar(8)
+
+  @@index([post_id, type], map: "link_direction")
+  @@index([target_post_id], map: "target_post_id")
+}
+
+model wp_rank_math_internal_meta {
+  object_id           BigInt @id @db.UnsignedBigInt
+  internal_link_count Int?   @default(0) @db.UnsignedInt
+  external_link_count Int?   @default(0) @db.UnsignedInt
+  incoming_link_count Int?   @default(0) @db.UnsignedInt
+}
+
+model wp_rank_math_redirections {
+  id            BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  sources       String   @db.Text
+  url_to        String   @db.Text
+  header_code   Int      @db.UnsignedSmallInt
+  hits          BigInt   @default(0) @db.UnsignedBigInt
+  status        String   @default("active") @db.VarChar(25)
+  created       DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  updated       DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  last_accessed DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@index([status], map: "status")
+}
+
+model wp_rank_math_redirections_cache {
+  id             BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  from_url       String  @db.Text
+  redirection_id BigInt  @db.UnsignedBigInt
+  object_id      BigInt  @default(0) @db.UnsignedBigInt
+  object_type    String  @default("post") @db.VarChar(10)
+  is_redirected  Boolean @default(false)
+
+  @@index([redirection_id], map: "redirection_id")
+}
+
+model wp_site_mail_logs {
+  id         Int      @id @default(autoincrement()) @db.UnsignedInt
+  api_id     String?  @default("") @db.VarChar(255)
+  to         String?  @db.Text
+  subject    String?  @default("") @db.VarChar(768)
+  headers    String?  @db.Text
+  message    String?  @db.Text
+  activity   String?  @db.Text
+  source     String   @db.Text
+  status     String?  @db.VarChar(255)
+  opened     Boolean?
+  created_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @default(now()) @db.DateTime(0)
+
+  @@index([api_id], map: "api_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model wp_site_mail_statuses {
+  id         Int      @id @default(autoincrement()) @db.UnsignedInt
+  log_id     String   @db.VarChar(255)
+  email      String   @db.VarChar(255)
+  type       String?  @default("to") @db.VarChar(3)
+  status     String?  @default("pending") @db.VarChar(255)
+  opened     Boolean  @default(false)
+  created_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @default(now()) @db.DateTime(0)
+
+  @@index([log_id], map: "log_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model wp_site_mail_suppressions {
+  id         Int      @id @default(autoincrement()) @db.UnsignedInt
+  email      String   @unique(map: "email") @db.VarChar(255)
+  reason     String?  @db.VarChar(255)
+  created_at DateTime @default(now()) @db.DateTime(0)
+  updated_at DateTime @default(now()) @db.DateTime(0)
+}
+
+model wp_term_relationships {
+  object_id        BigInt @default(0) @db.UnsignedBigInt
+  term_taxonomy_id BigInt @default(0) @db.UnsignedBigInt
+  term_order       Int    @default(0)
+
+  @@id([object_id, term_taxonomy_id])
+  @@index([term_taxonomy_id], map: "term_taxonomy_id")
+}
+
+model wp_term_taxonomy {
+  term_taxonomy_id BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  term_id          BigInt @default(0) @db.UnsignedBigInt
+  taxonomy         String @default("") @db.VarChar(32)
+  description      String @db.LongText
+  parent           BigInt @default(0) @db.UnsignedBigInt
+  count            BigInt @default(0)
+
+  @@unique([term_id, taxonomy], map: "term_id_taxonomy")
+  @@index([taxonomy], map: "taxonomy")
+}
+
+model wp_termmeta {
+  meta_id    BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  term_id    BigInt  @default(0) @db.UnsignedBigInt
+  meta_key   String? @db.VarChar(255)
+  meta_value String? @db.LongText
+
+  @@index([meta_key(length: 191)], map: "meta_key")
+  @@index([term_id], map: "term_id")
+}
+
+model wp_terms {
+  term_id    BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  name       String @default("") @db.VarChar(200)
+  slug       String @default("") @db.VarChar(200)
+  term_group BigInt @default(0)
+
+  @@index([name(length: 191)], map: "name")
+  @@index([slug(length: 191)], map: "slug")
+}
+
+model wp_usermeta {
+  umeta_id   BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id    BigInt  @default(0) @db.UnsignedBigInt
+  meta_key   String? @db.VarChar(255)
+  meta_value String? @db.LongText
+
+  @@index([meta_key(length: 191)], map: "meta_key")
+  @@index([user_id], map: "user_id")
+}
+
+model wp_users {
+  ID                  BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  user_login          String   @default("") @db.VarChar(60)
+  user_pass           String   @default("") @db.VarChar(255)
+  user_nicename       String   @default("") @db.VarChar(50)
+  user_email          String   @default("") @db.VarChar(100)
+  user_url            String   @default("") @db.VarChar(100)
+  user_registered     DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  user_activation_key String   @default("") @db.VarChar(255)
+  user_status         Int      @default(0)
+  display_name        String   @default("") @db.VarChar(250)
+
+  @@index([user_email], map: "user_email")
+  @@index([user_login], map: "user_login_key")
+  @@index([user_nicename], map: "user_nicename")
+}
+
+model wp_yoast_indexable {
+  id                             Int       @id @default(autoincrement()) @db.UnsignedInt
+  permalink                      String?   @db.LongText
+  permalink_hash                 String?   @db.VarChar(40)
+  object_id                      BigInt?
+  object_type                    String    @db.VarChar(32)
+  object_sub_type                String?   @db.VarChar(32)
+  author_id                      BigInt?
+  post_parent                    BigInt?
+  title                          String?   @db.Text
+  description                    String?   @db.MediumText
+  breadcrumb_title               String?   @db.Text
+  post_status                    String?   @db.VarChar(20)
+  is_public                      Boolean?
+  is_protected                   Boolean?  @default(false)
+  has_public_posts               Boolean?
+  number_of_pages                Int?      @db.UnsignedInt
+  canonical                      String?   @db.LongText
+  primary_focus_keyword          String?
+  primary_focus_keyword_score    Int?
+  readability_score              Int?
+  is_cornerstone                 Boolean?  @default(false)
+  is_robots_noindex              Boolean?  @default(false)
+  is_robots_nofollow             Boolean?  @default(false)
+  is_robots_noarchive            Boolean?  @default(false)
+  is_robots_noimageindex         Boolean?  @default(false)
+  is_robots_nosnippet            Boolean?  @default(false)
+  twitter_title                  String?   @db.Text
+  twitter_image                  String?   @db.LongText
+  twitter_description            String?   @db.LongText
+  twitter_image_id               String?
+  twitter_image_source           String?   @db.Text
+  open_graph_title               String?   @db.Text
+  open_graph_description         String?   @db.LongText
+  open_graph_image               String?   @db.LongText
+  open_graph_image_id            String?
+  open_graph_image_source        String?   @db.Text
+  open_graph_image_meta          String?   @db.MediumText
+  link_count                     Int?
+  incoming_link_count            Int?
+  prominent_words_version        Int?      @db.UnsignedInt
+  created_at                     DateTime? @db.DateTime(0)
+  updated_at                     DateTime  @default(now()) @db.Timestamp(0)
+  blog_id                        BigInt    @default(1)
+  language                       String?   @db.VarChar(32)
+  region                         String?   @db.VarChar(32)
+  schema_page_type               String?   @db.VarChar(64)
+  schema_article_type            String?   @db.VarChar(64)
+  has_ancestors                  Boolean?  @default(false)
+  estimated_reading_time_minutes Int?
+  version                        Int?      @default(1)
+  object_last_modified           DateTime? @db.DateTime(0)
+  object_published_at            DateTime? @db.DateTime(0)
+  inclusive_language_score       Int?
+
+  @@index([object_id, object_type], map: "object_id_and_type")
+  @@index([object_type, object_sub_type], map: "object_type_and_sub_type")
+  @@index([permalink_hash, object_type], map: "permalink_hash_and_object_type")
+  @@index([prominent_words_version, object_type, object_sub_type, post_status], map: "prominent_words")
+  @@index([object_published_at, is_robots_noindex, object_type, object_sub_type], map: "published_sitemap_index")
+  @@index([post_parent, object_type, post_status, object_id], map: "subpages")
+}
+
+model wp_yoast_indexable_hierarchy {
+  indexable_id Int    @db.UnsignedInt
+  ancestor_id  Int    @db.UnsignedInt
+  depth        Int?   @db.UnsignedInt
+  blog_id      BigInt @default(1)
+
+  @@id([indexable_id, ancestor_id])
+  @@index([ancestor_id], map: "ancestor_id")
+  @@index([depth], map: "depth")
+  @@index([indexable_id], map: "indexable_id")
+}
+
+model wp_yoast_migrations {
+  id      Int     @id @default(autoincrement()) @db.UnsignedInt
+  version String? @unique(map: "wp_yoast_migrations_version")
+}
+
+model wp_yoast_primary_term {
+  id         Int       @id @default(autoincrement()) @db.UnsignedInt
+  post_id    BigInt?
+  term_id    BigInt?
+  taxonomy   String    @db.VarChar(32)
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime  @default(now()) @db.Timestamp(0)
+  blog_id    BigInt    @default(1)
+
+  @@index([post_id, taxonomy], map: "post_taxonomy")
+  @@index([post_id, term_id], map: "post_term")
+}
+
+model wp_yoast_seo_links {
+  id                  BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  url                 String? @db.VarChar(255)
+  post_id             BigInt? @db.UnsignedBigInt
+  target_post_id      BigInt? @db.UnsignedBigInt
+  type                String? @db.VarChar(8)
+  indexable_id        Int?    @db.UnsignedInt
+  target_indexable_id Int?    @db.UnsignedInt
+  height              Int?    @db.UnsignedInt
+  width               Int?    @db.UnsignedInt
+  size                Int?    @db.UnsignedInt
+  language            String? @db.VarChar(32)
+  region              String? @db.VarChar(32)
+
+  @@index([indexable_id, type], map: "indexable_link_direction")
+  @@index([post_id, type], map: "link_direction")
+}
+
+model paynearby_admin {
+  id       BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  name     String @db.VarChar(150)
+  email    String @unique @db.VarChar(150)
+  password String @db.VarChar(255)
+  role     String @default("admin") @db.VarChar(50)
+
+  @@index([role], map: "role_index")
+}
+model paynearby_user {
+  id       BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  name     String @db.VarChar(150)
+  email    String @unique @db.VarChar(150)
+  password String @db.VarChar(255)
+  role     String @default("user") @db.VarChar(50)
+
+  @@index([role], map: "role_index")
+}
+
+model paynearby_partner_apply {
+  id            BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  name          String @db.VarChar(150)
+  email         String @unique @db.VarChar(150)
+  mobile        Int    @db.TinyInt
+  aadhaar       String @db.VarChar(150)
+  pan           String @db.VarChar(150)
+  panfilename      String @default("") @db.VarChar(32)
+  aadhaarfilename      String @default("") @db.VarChar(32)
+  fulladdress   String @db.VarChar(150)
+  created_at    DateTime @default(now())
+}
+
+model paynearby_contact {
+  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  name        String   @db.VarChar(150)
+  email       String   @db.VarChar(150)
+  phone       String?  @db.VarChar(20)
+  shopname     String?  @db.VarChar(150)
+  message     String   @db.Text
+  status      String   @default("pending") @db.VarChar(50)
+  createdAt   DateTime @default(now())
+}
