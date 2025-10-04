@@ -15,7 +15,7 @@ const Navbar = () => {
     { name: "Home", href: "/" },
     { name: "Package", href: "#package" },
     { name: "Services", href: "#services" },
-    { name: "Gallery", href: "#gallery" },
+    { name: "Gallery", href: "/gallery" },
     { name: "About", href: "#about" },
     { name: "Contact", href: "#contact" },
   ];
@@ -33,7 +33,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden lg:flex items-center space-x-6">
           {navigation.map((item) => (
             <Link
               key={item.name}
@@ -83,7 +83,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center space-x-2">
+        <div className="lg:hidden flex items-center space-x-2">
           {status !== "loading" &&
             (!session ? (
               <button
@@ -127,7 +127,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Links */}
         {isOpen && (
-          <div className="absolute top-16 left-0 w-full bg-white shadow-md rounded-b-lg md:hidden">
+          <div className="absolute top-16  left-[70%] w-[50%] bg-white shadow-md rounded-b-lg lg:hidden">
             <div className="flex flex-col space-y-2 p-4">
               {navigation.map((item) => (
                 <Link

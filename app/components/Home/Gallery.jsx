@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,7 +21,7 @@ const Gallery = () => {
     setSelectedIndex((prev) => (prev - 1 + images.length) % images.length);
 
   return (
-    <section id="gallery" className="py-16 bg-cyan-600">
+    <section id="gallery" className="py-20 bg-cyan-600">
       <h2 className="text-3xl font-bold text-center text-white mb-10">
         Gallery
       </h2>

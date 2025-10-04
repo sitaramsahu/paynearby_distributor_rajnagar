@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import HeroSection from "@/app/components/Home/HeroSection";
-import Gallery from "@/app/components/Home/Gallery";
 import About from "@/app/components/Home/About";
 import Services from "@/app/components/Home/Services";
 import Contact from "@/app/components/Home/Contact";
@@ -109,9 +108,7 @@ export default function Home() {
           </ul>
         </motion.div>
       </motion.div>
-      {/* 5. Gallery Section */}
-      <Gallery />
-      {/* 6. Contact Section */}
+      {/* 5. Contact Section */}
       <Contact />
     </div>
   );
