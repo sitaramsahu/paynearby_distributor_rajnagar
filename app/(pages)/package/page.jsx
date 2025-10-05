@@ -1,27 +1,14 @@
 "use client";
-
+import React from "react";
 import { motion } from "framer-motion";
-import HeroSection from "@/app/components/Home/HeroSection";
-import About from "@/app/components/Home/About";
-import Services from "@/app/components/Home/Services";
-import Contact from "@/app/components/Home/Contact";
 import Link from "next/link";
 
-// import { useTheme } from "@/app/contexts/ThemeContext";
-
-export default function Home() {
+const page = () => {
   return (
-    <div className="bg-white">
-      {/* 1. Hero Section */}
-      <HeroSection />
-      {/* 2. Services Section */}
-      <Services />
-      {/* 3. About Section */}
-      <About />
-      {/* 4. Package Section */}
+    <div className="bg-white mt-20 p-12">
       <motion.div
         id="package"
-        className="flex flex-col md:flex-row bg-gray-100 overflow-hidden"
+        className="flex flex-col md:flex-row bg-gray-100 overflow-hidden shadow-lg rounded-lg"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
@@ -109,8 +96,8 @@ export default function Home() {
           </ul>
         </motion.div>
       </motion.div>
-      {/* 5. Contact Section */}
-      <Contact />
     </div>
   );
-}
+};
+
+export default page;

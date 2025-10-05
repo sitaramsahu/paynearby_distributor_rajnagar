@@ -1,10 +1,10 @@
-import Contact from "@/app/components/Home/Contact";
+import Services from "@/app/components/Home/Services";
 import React from "react";
 
 const page = () => {
   return (
     <div className="pt-20">
-      <Contact />
+      <Services />
     </div>
   );
 };

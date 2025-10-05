@@ -1,4 +1,5 @@
 "use client";
+import { Eye } from "lucide-react";
 import React, { useState } from "react";
 
 const Page = () => {
@@ -65,8 +66,8 @@ const Page = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-50 flex items-center justify-center p-5">
-      <div className="bg-white rounded-3xl shadow-2xl p-10 w-full max-w-4xl">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-indigo-50 flex items-center justify-center mt-12">
+      <div className="bg-white rounded-3xl shadow-2xl p-5 w-full max-w-4xl">
         <h1 className="text-3xl font-bold text-center text-indigo-700 mb-8">
           Become a PayNearby Retailer Partner
         </h1>
@@ -176,13 +177,13 @@ const Page = () => {
           {/* PAN File */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
-              PAN Document
+              Upload Your PAN Card
             </label>
             <input
               type="file"
               accept=".pdf,.jpg,.png"
               onChange={(e) => handleFileChange(e, "pan")}
-              className="w-full text-gray-700"
+              className="w-full text-gray-700 border-2 border-green-200 shadow-sm px-4 py-2 rounded-lg"
             />
             {panFile && (
               <p className="text-sm text-indigo-600 mt-1">{panFile.name}</p>
@@ -192,13 +193,13 @@ const Page = () => {
           {/* Aadhaar File */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
-              Aadhaar Document
+              Upload Your Aadhaar Card
             </label>
             <input
               type="file"
               accept=".pdf,.jpg,.png"
               onChange={(e) => handleFileChange(e, "aadhaar")}
-              className="w-full text-gray-700"
+              className="w-full text-gray-700 border-2 border-green-200 shadow-sm px-4 py-2 rounded-lg"
             />
             {aadhaarFile && (
               <p className="text-sm text-indigo-600 mt-1">{aadhaarFile.name}</p>

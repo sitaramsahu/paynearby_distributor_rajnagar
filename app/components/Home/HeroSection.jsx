@@ -23,7 +23,7 @@ export default function HeroSection() {
   return (
     <section
       id="home"
-      className="-mt-24 md:mt-12 min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-100 via-purple-100 to-blue-300 relative overflow-hidden"
+      className="mt-20 min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-blue-100 via-purple-100 to-blue-300 relative overflow-hidden"
     >
       {/* Animated Heading */}
       <motion.div
@@ -32,14 +32,14 @@ export default function HeroSection() {
         transition={{ duration: 0.8 }}
         className="text-center z-10"
       >
-        <div className="w-full max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center">
+        <div className="w-full max-w-7xl flex flex-col md:flex-row justify-around gap-6 items-center">
           {/* Left */}
           <h1 className="text-xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-700 via-purple-600 to-pink-500 text-transparent bg-clip-text text-center md:text-left">
             PayNearby Distributor
           </h1>
           {/* Right */}
           <h1 className="text-xl md:text-4xl font-extrabold bg-gradient-to-r from-green-600 via-blue-500 to-purple-500 text-transparent bg-clip-text mt-4 md:mt-0 text-center md:text-right">
-            Raju Cyber Seva, Rajnagar
+            Raju Cyber Seva
           </h1>
         </div>
       </motion.div>
@@ -93,7 +93,7 @@ export default function HeroSection() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: -30 }}
             transition={{ duration: 0.8 }}
-            className="max-h-[70vh] max-w-[80vw] rounded-2xl shadow-2xl border-4 border-white relative"
+            className="max-h-[70vh] max-w-[90vw] rounded-2xl shadow-2xl border-4 border-white relative"
           />
         </AnimatePresence>
       </div>

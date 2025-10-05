@@ -13,11 +13,11 @@ const Navbar = () => {
 
   const navigation = [
     { name: "Home", href: "/" },
-    { name: "Package", href: "#package" },
-    { name: "Services", href: "#services" },
+    { name: "Package", href: "/package" },
+    { name: "Services", href: "/services" },
     { name: "Gallery", href: "/gallery" },
-    { name: "About", href: "#about" },
-    { name: "Contact", href: "#contact" },
+    { name: "About", href: "/about-us" },
+    { name: "Contact", href: "/contact-us" },
   ];
 
   return (
