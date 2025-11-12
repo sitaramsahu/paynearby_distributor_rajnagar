@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
   const [registerData, setRegisterData] = useState({
@@ -12,6 +13,7 @@ export default function RegisterPage() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
@@ -64,16 +66,26 @@ export default function RegisterPage() {
             className="w-full p-2 border rounded"
             required
           />
-          <input
-            type="password"
-            placeholder="Password"
-            value={registerData.password}
-            onChange={(e) =>
-              setRegisterData({ ...registerData, password: e.target.value })
-            }
-            className="w-full p-2 border rounded"
-            required
-          />
+          <div className="relative w-full">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={registerData.password}
+              onChange={(e) =>
+                setRegisterData({ ...registerData, password: e.target.value })
+              }
+              className="w-full p-2 border rounded pr-10"
+              required
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-2 flex items-center text-gray-500"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
           <button
             type="submit"
             disabled={loading}

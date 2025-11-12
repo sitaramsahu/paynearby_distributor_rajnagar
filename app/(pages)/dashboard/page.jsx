@@ -1,75 +1,56 @@
 "use client";
-
 import { useEffect, useState } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { BarChart3, User, FileText } from "lucide-react";
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession();
-  const [userRole, setUserRole] = useState(null);
+  const [stats, setStats] = useState({
+    users: 0,
+    partners: 0,
+    payments: 0,
+  });
 
   useEffect(() => {
-    if (session?.user) {
-      setUserRole(session.user.role); // role from session
-    }
-  }, [session]);
-
-  if (status === "loading") {
-    return <p className="text-center mt-10">Loading...</p>;
-  }
-
-  if (!session) {
-    return (
-      <div className="text-center mt-20">
-        <p>You are not logged in ❌</p>
-        <a
-          href="/login"
-          className="mt-4 inline-block bg-green-600 text-white px-4 py-2 rounded"
-        >
-          Go to Login
-        </a>
-      </div>
-    );
-  }
+    const fetchData = async () => {
+      const [u, p, pay] = await Promise.all([
+        fetch("/api/register")
+          .then((res) => res.json())
+          .catch(() => []),
+        fetch("/api/partner")
+          .then((res) => res.json())
+          .catch(() => []),
+        fetch("/api/package-payment")
+          .then((res) => res.json())
+          .catch(() => []),
+      ]);
+      setStats({
+        users: u?.users?.length || 0,
+        partners: p?.partners?.length || 0,
+        payments: pay?.payments?.length || 0,
+      });
+    };
+    fetchData();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8 mt-16">
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">
-          Welcome, {session.user.name || "User"}!
-        </h1>
-        <button
-          onClick={() => signOut({ callbackUrl: "/" })}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-        >
-          Logout
-        </button>
-      </header>
+    <div>
+      <h1 className="text-3xl font-semibold mb-6">Dashboard Overview</h1>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card title="Total Users" value={stats.users} icon={User} />
+        <Card title="Partners" value={stats.partners} icon={FileText} />
+        <Card title="Payments" value={stats.payments} icon={BarChart3} />
+      </div>
+    </div>
+  );
+}
 
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {userRole === "admin" ? (
-          <>
-            <div className="bg-white p-6 rounded shadow">
-              <h2 className="text-xl font-bold mb-2">Admin Panel</h2>
-              <p>Manage users, view reports, and configure system settings.</p>
-            </div>
-            <div className="bg-white p-6 rounded shadow">
-              <h2 className="text-xl font-bold mb-2">Analytics</h2>
-              <p>View statistics, user activity, and system health.</p>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="bg-white p-6 rounded shadow">
-              <h2 className="text-xl font-bold mb-2">User Dashboard</h2>
-              <p>View your profile, bookings, and account settings.</p>
-            </div>
-            <div className="bg-white p-6 rounded shadow">
-              <h2 className="text-xl font-bold mb-2">Support</h2>
-              <p>Access help articles or contact support.</p>
-            </div>
-          </>
-        )}
-      </section>
+function Card({ title, value, icon: Icon }) {
+  return (
+    <div className="bg-white shadow rounded-lg p-5 flex items-center justify-between">
+      <div>
+        <h2 className="text-gray-600">{title}</h2>
+        <p className="text-2xl font-bold">{value}</p>
+      </div>
+      <Icon className="text-amber-600" size={28} />
     </div>
   );
 }
