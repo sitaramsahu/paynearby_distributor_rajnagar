@@ -11,6 +11,9 @@ const Gallery = () => {
     "/img/gallery4.png",
     "/img/gallery3.png",
     "/img/gallery6.png",
+    "/img/gallery7.png",
+    "/img/gallery8.png",
+    "/img/gallery9.png",
   ];
   const [selectedIndex, setSelectedIndex] = useState(null);
 
