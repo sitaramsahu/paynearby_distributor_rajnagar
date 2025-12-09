@@ -58,6 +58,55 @@ const Services = () => {
           </motion.div>
         ))}
       </div>
+      {/* section */}
+      <div className="max-w-7xl mx-auto px-4 md:px-0 mt-12 flex items-start gap-8">
+        {/* left side */}
+        <video
+          className="w-[800px] h-[400px] rounded-lg"
+          src="/video/home-option.mp4"
+          type="video/mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          Your browser does not support the video tag.
+        </video>
+
+        {/* right side – Business Process & Growth Focus Areas */}
+        <div className="w-full max-w-md space-y-4">
+          <h3 className="text-xl font-semibold text-gray-800">
+            Business Process & Growth Focus Areas
+          </h3>
+
+          <ul className="space-y-3 text-gray-600 text-sm leading-6">
+            <li>
+              <strong>Order Digitization:</strong> Streamlining the ordering
+              process using digital tools for better accuracy and efficiency.
+            </li>
+            <li>
+              <strong>Payment Disbursal:</strong> Automating and simplifying
+              vendor, partner, or customer payment settlements.
+            </li>
+            <li>
+              <strong>Product Sampling:</strong> Structured sampling to increase
+              product awareness and customer trials.
+            </li>
+            <li>
+              <strong>Self-Space Optimization:</strong> Maximizing utilization
+              of store or warehouse shelf space for better visibility and sales.
+            </li>
+            <li>
+              <strong>Cash Collection:</strong> Ensuring secure and efficient
+              daily cash pickup, tracking, and reconciliation.
+            </li>
+            <li>
+              <strong>Market Expansion:</strong> Increasing reach into new
+              territories, customer segments, and distribution channels.
+            </li>
+          </ul>
+        </div>
+      </div>
     </section>
   );
 };
