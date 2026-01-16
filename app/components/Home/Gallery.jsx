@@ -14,6 +14,11 @@ const Gallery = () => {
     "/img/gallery7.png",
     "/img/gallery8.png",
     "/img/gallery9.png",
+    "/aeps/aeps-logo.png",
+    "/aeps/account-opening.png",
+    "/aeps/fastag.png",
+    "/aeps/money-transfer.png",
+    "/aeps/pan-card.png",
   ];
   const [selectedIndex, setSelectedIndex] = useState(null);
 
